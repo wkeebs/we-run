@@ -12,6 +12,17 @@ const testData = [
   {details: {distance: 23, type: TYPE_LONG}},
   {details: {distance: 24, type: TYPE_LONG}},
   {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
 ]
 
 function App() {

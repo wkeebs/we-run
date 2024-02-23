@@ -15,7 +15,7 @@ const ActivityCalendar = ({ data }) => {
       {chunkedArr.map((elem, idx) => {
         return (
           <Stack direction="row" spacing={1}>
-            <HeaderCard rowNum={idx} />
+            <HeaderCard rowNum={idx + 1} />
             <ActivityCycle activities={elem} length={CYCLE_LENGTH} />
           </Stack>
         );

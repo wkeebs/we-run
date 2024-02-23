@@ -9,7 +9,7 @@ const BaseCard = ({ title, content, info }) => {
     >
       <CardActionArea sx={{ width: "100%", height: "100%" }}>
         <CardContent sx={{ textAlign: "start" }}>
-          <Typography variant="subtitle2">{info}</Typography>
+          <Typography variant="caption" >{info}</Typography>
           <Typography variant="h6">{title}</Typography>
           <Typography variant="body2">{content}</Typography>
         </CardContent>
