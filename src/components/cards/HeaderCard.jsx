@@ -11,8 +11,17 @@ import DragHandleIcon from "@mui/icons-material/DragHandle";
 const HeaderCard = ({ rowNum }) => {
   const [hover, setHover] = useState(false);
 
+  const hoverHandleIcon = (
+    <DragHandleIcon
+      sx={{ opacity: hover ? 0.5 : 0, transition: "all 0.1s ease-in" }}
+    />
+  );
+
   return (
-    <Card variant="outlined" sx={{ borderRadius: 0, minHeight: "100px" }}>
+    <Card
+      variant="outlined"
+      sx={{ borderRadius: 0, minHeight: "100px", background: "#cacaca" }}
+    >
       <CardActionArea
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
@@ -25,11 +34,11 @@ const HeaderCard = ({ rowNum }) => {
           justifyContent="space-between"
           height="100%"
         >
-          <DragHandleIcon sx={{opacity: (hover ? 0.5 : 0)}}/>
+          {hoverHandleIcon}
           <CardContent sx={{ textAlign: "start", p: 0 }}>
             <Typography variant="h6">{rowNum}</Typography>
           </CardContent>
-          <DragHandleIcon sx={{opacity: (hover ? 0.5 : 0)}}/>
+          {hoverHandleIcon}
         </Box>
       </CardActionArea>
     </Card>
