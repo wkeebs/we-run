@@ -1,19 +1,21 @@
 import "./App.css";
-import ActivityCard from "./components/ActivityCard";
-
-const TYPE_EASY = "easy"
-const TYPE_LONG = "long"
-const TYPE_INTERVALS = "interval"
+import ActivityCalendar from "./components/ActivityCalendar";
+import { TYPE_EASY, TYPE_INTERVALS, TYPE_LONG } from "./data";
 
 const testData = [
-  {details: {length: 5, type: TYPE_EASY}},
-  {details: {length: 10, type: TYPE_INTERVALS}},
-  {details: {length: 7, type: TYPE_EASY}},
-  {details: {length: 20, type: TYPE_LONG}},
+  {details: {distance: 5, type: TYPE_EASY}},
+  {details: {distance: 10, type: TYPE_INTERVALS}},
+  {details: {distance: 7, type: TYPE_EASY}},
+  {details: {distance: 20, type: TYPE_LONG}},
+  {details: {distance: 21, type: TYPE_LONG}},
+  {details: {distance: 22, type: TYPE_LONG}},
+  {details: {distance: 23, type: TYPE_LONG}},
+  {details: {distance: 24, type: TYPE_LONG}},
+  {details: {distance: 25, type: TYPE_LONG}},
 ]
 
 function App() {
-  return <>{testData.map((entry) => <ActivityCard details={entry.details} />)}</>;
+  return <><ActivityCalendar data={testData}></ActivityCalendar></>;
 }
 
 export default App;

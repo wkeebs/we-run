@@ -1,12 +1,20 @@
-import { Card, CardContent, Typography } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardHeader,
+  Typography,
+} from "@mui/material";
 
-const ActivityCard = ({ details: { length, type } }) => {
+const ActivityCard = ({ details: { distance, type } }) => {
   return (
-    <Card variant="outlined" sx={{width: "250px", height: "150px", m: "15px"}}>
-      <CardContent sx={{textAlign: "start"}}>
-        <Typography variant="h3">{length} km</Typography>
-        <Typography variant="body1">{type} run</Typography>
-      </CardContent>
+    <Card variant="outlined" sx={{ width: "250px", height: "150px" }}>
+      <CardActionArea sx={{width: "100%", height: "100%"}}>
+        <CardContent sx={{ textAlign: "start" }}>
+          <Typography variant="h5">{distance} km</Typography>
+          <Typography variant="body2">{type} run</Typography>
+        </CardContent>
+      </CardActionArea>
     </Card>
   );
 };
