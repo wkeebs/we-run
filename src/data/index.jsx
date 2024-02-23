@@ -1,5 +1,4 @@
-const TYPE_EASY = "easy";
-const TYPE_LONG = "long";
-const TYPE_INTERVALS = "interval";
-
-export { TYPE_EASY, TYPE_INTERVALS, TYPE_LONG };
+export const TYPE_EASY = "easy";
+export const TYPE_LONG = "long";
+export const TYPE_INTERVALS = "interval";
+export const CYCLE_LENGTH = 7;
