@@ -22,13 +22,22 @@ const red = "#ef5350";
 const blue = "#64b5f6";
 
 const ActivityCard = ({ details: { distance, type }, num }) => {
+  const [currentType, setCurrentType] = useState(type);
+  const [currentDistance, setCurrentDistance] = useState(distance);
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const updateCard = ({ newDistance, newType }) => {
+    setCurrentType(newType);
+    setCurrentDistance(newDistance);
+    handleClose();
+  };
+
   const createTypeElement = () => {
     let colour;
-    switch (type) {
+    switch (currentType) {
       case TYPE_EASY:
         colour = green;
         break;
@@ -43,6 +52,7 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
         colour = "white";
         break;
     }
+
     return (
       <Box
         sx={{
@@ -53,7 +63,7 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
           width: "max-content",
         }}
       >
-        {type}
+        {currentType}
       </Box>
     );
   };
@@ -61,8 +71,8 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
   return (
     <>
       <BaseCard
-        title={distance + " km"}
-        content={createTypeElement(type)}
+        title={currentDistance + " km"}
+        content={createTypeElement(currentType)}
         info={num}
         onClick={handleOpen}
       ></BaseCard>
@@ -81,7 +91,10 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
       >
         <Fade in={open}>
           <Box sx={modalStyle}>
-            <EditActivity details={{distance, type}}/>
+            <EditActivity
+              details={{ distance: currentDistance, type: currentType }}
+              onSubmit={updateCard}
+            />
           </Box>
         </Fade>
       </Modal>
