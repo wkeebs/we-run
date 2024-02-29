@@ -11,7 +11,6 @@ import {
 import React, { useState } from "react";
 
 import { TYPE_EASY, TYPE_INTERVALS, TYPE_LONG } from "../data";
-import NumberInputBasic from "./NumberInput";
 
 const EditActivity = ({ details: { distance, type } }) => {
   const [newType, setNewType] = useState(type);

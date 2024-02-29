@@ -2,6 +2,7 @@ import BaseCard from "./BaseCard";
 import { TYPE_EASY, TYPE_INTERVALS, TYPE_LONG } from "../../data";
 import { useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
+import EditActivity from "../EditActivity";
 
 const modalStyle = {
   position: "absolute",
@@ -79,7 +80,9 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
         }}
       >
         <Fade in={open}>
-          <Box sx={modalStyle}>test</Box>
+          <Box sx={modalStyle}>
+            <EditActivity details={{distance, type}}/>
+          </Box>
         </Fade>
       </Modal>
     </>
