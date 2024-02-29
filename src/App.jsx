@@ -29,8 +29,7 @@ const testData = [
 function App() {
   return (
     <>
-      {/* <ActivityCalendar data={testData}></ActivityCalendar> */}
-      <EditActivity details={testData[0].details}></EditActivity>
+      <ActivityCalendar data={testData}></ActivityCalendar>
     </>
   );
 }
