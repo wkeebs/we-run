@@ -1,7 +1,5 @@
 import React from "react";
 import { CYCLE_LENGTH } from "../data";
-import Grid from "@mui/material/Unstable_Grid2";
-import ActivityCard from "./cards/ActivityCard";
 import HeaderCard from "./cards/HeaderCard";
 import { chunk } from "../utils/arrayOperations";
 import ActivityCycle from "./ActivityCycle";
@@ -14,7 +12,12 @@ const ActivityCalendar = ({ data }) => {
     <>
       {chunkedArr.map((elem, idx) => {
         return (
-          <Stack direction="row" spacing={1}>
+          <Stack
+            key={idx}
+            direction="row"
+            spacing={1}
+            sx={{ marginY: "0.25rem", border: "1px solid gray" }}
+          >
             <HeaderCard rowNum={idx + 1} />
             <ActivityCycle activities={elem} length={CYCLE_LENGTH} />
           </Stack>
