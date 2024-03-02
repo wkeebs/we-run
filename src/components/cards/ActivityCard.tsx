@@ -1,9 +1,9 @@
 import BaseCard from "./BaseCard";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import EditActivity from "../EditActivity";
 import { RUN_TYPE } from "../../data";
-import { useDrag } from "react-dnd";
+import { useDrag, useDrop } from "react-dnd";
 
 const modalStyle = {
   position: "absolute",
@@ -25,11 +25,10 @@ export enum COLOUR {
 }
 
 export type ActivityCardProps = {
-  details: {
-    distance: number;
-    type: RUN_TYPE;
-  };
+  distance: number;
+  type: RUN_TYPE;
   num: number;
+  swapWith: (index: number) => void;
 };
 
 export type CardUpdateType = {
@@ -42,11 +41,20 @@ export const DragItemTypes = {
 };
 
 const ActivityCard: React.FC<ActivityCardProps> = ({
-  details: { distance, type },
+  distance,
+  type,
   num,
+  swapWith,
 }) => {
   const [currentType, setCurrentType] = useState(type);
   const [currentDistance, setCurrentDistance] = useState(distance);
+  
+  // update the state each time the props change -> 
+  // do I only need this because of scope?
+  useEffect(() => {
+    setCurrentType(type);
+    setCurrentDistance(distance);
+  }, [distance, type]);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -99,14 +107,30 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
     }),
   }));
 
+  const [{ isOver }, drop] = useDrop(
+    () => ({
+      accept: DragItemTypes.ACTIVITY,
+      drop: () => swapWith(1),
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+      }),
+    }),
+    []
+  );
+
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1, cursor: "move" }}>
-      <BaseCard
-        title={currentDistance + " km"}
-        content={createTypeElement(currentType)}
-        info={num.toLocaleString()}
-        onClick={handleOpen}
-      ></BaseCard>
+    <div
+      ref={drag}
+      style={{ opacity: isDragging ? 0.5 : 1, cursor: "pointer" }}
+    >
+      {currentDistance && currentType && (
+        <BaseCard
+          title={currentDistance + " km"}
+          content={createTypeElement(currentType)}
+          info={num.toLocaleString()}
+          onClick={handleOpen}
+        ></BaseCard>
+      )}
       <Modal
         open={open}
         onClose={handleClose}

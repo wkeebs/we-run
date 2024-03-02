@@ -15,16 +15,18 @@ const BaseCard: React.FC<BaseCardProps> = ({
   onClick,
 }) => {
   return (
-    <Card variant="outlined" sx={{ borderRadius: 0, minHeight: "100px" }}>
-      <CardActionArea onClick={onClick} sx={{ width: "100%", height: "100%" }}>
-        <CardContent sx={{ textAlign: "start" }}>
-          <Typography variant="caption">{info}</Typography>
-          <Typography variant="h6">{title}</Typography>
-          <Typography component={"span"} variant="body2">
-            {content}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+    <Card
+      onClick={onClick}
+      variant="outlined"
+      sx={{ borderRadius: 0, minHeight: "100px" }}
+    >
+      <CardContent sx={{ textAlign: "start" }}>
+        <Typography variant="caption">{info}</Typography>
+        <Typography variant="h6">{title}</Typography>
+        <Typography component={"span"} variant="body2">
+          {content}
+        </Typography>
+      </CardContent>
     </Card>
   );
 };
