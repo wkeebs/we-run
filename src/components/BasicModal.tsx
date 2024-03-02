@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 
 const style = {
   position: "absolute",
@@ -15,7 +15,11 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ modalContent }) {
+export type BasicModalProps = {
+  modalContent: ReactElement
+}
+
+const BasicModal: React.FC<BasicModalProps>  = ({ modalContent }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -29,8 +33,10 @@ export default function BasicModal({ modalContent }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>{content}</Box>
+        <Box sx={style}>{modalContent}</Box>
       </Modal>
     </div>
   );
 }
+
+export default BasicModal

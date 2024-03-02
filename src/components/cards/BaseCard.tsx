@@ -1,7 +1,19 @@
 import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
-import React from "react";
+import React, { ReactElement } from "react";
 
-const BaseCard = ({ title, content, info, onClick }) => {
+export type BaseCardProps = {
+  title: string;
+  content: ReactElement;
+  info: string;
+  onClick: () => void;
+};
+
+const BaseCard: React.FC<BaseCardProps> = ({
+  title,
+  content,
+  info,
+  onClick,
+}) => {
   return (
     <Card variant="outlined" sx={{ borderRadius: 0, minHeight: "100px" }}>
       <CardActionArea onClick={onClick} sx={{ width: "100%", height: "100%" }}>

@@ -23,7 +23,7 @@ const Activities = () => {
   }, [callRefresh]);
 
   // use current access token to call all activities
-  const getActivities = (access) => {
+  const getActivities = (access: string) => {
     // console.log(callActivities + access)
     fetch(callActivities + access)
       .then((res) => res.json())

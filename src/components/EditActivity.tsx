@@ -10,10 +10,21 @@ import {
 } from "@mui/material";
 
 import React, { useState } from "react";
+import { RUN_TYPE } from "../data";
+import { CardUpdateType } from "./cards/ActivityCard";
 
-import { TYPE_EASY, TYPE_INTERVALS, TYPE_LONG } from "../data";
+export type EditActivityProps = {
+  details: {
+    distance: number;
+    type: RUN_TYPE;
+  };
+  onSubmit: (update: CardUpdateType) => void;
+};
 
-const EditActivity = ({ details: { distance, type }, onSubmit }) => {
+const EditActivity: React.FC<EditActivityProps> = ({
+  details: { distance, type },
+  onSubmit,
+}) => {
   const [newType, setNewType] = useState(type);
   const [newDistance, setNewDistance] = useState(distance);
 
@@ -32,11 +43,26 @@ const EditActivity = ({ details: { distance, type }, onSubmit }) => {
           id="type-select"
           value={newType}
           label="Run Type"
-          onChange={(e) => setNewType(e.target.value)}
+          onChange={(e) => {
+            switch (e.target.value) {
+              case RUN_TYPE.EASY:
+                setNewType(RUN_TYPE.EASY);
+                break;
+              case RUN_TYPE.INTERVAL:
+                setNewType(RUN_TYPE.INTERVAL);
+                break;
+              case RUN_TYPE.LONG:
+                setNewType(RUN_TYPE.LONG);
+                break;
+
+              default:
+                break;
+            }
+          }}
         >
-          <MenuItem value={TYPE_EASY}>Easy</MenuItem>
-          <MenuItem value={TYPE_INTERVALS}>Interval</MenuItem>
-          <MenuItem value={TYPE_LONG}>Long</MenuItem>
+          <MenuItem value={RUN_TYPE.EASY}>{RUN_TYPE.EASY}</MenuItem>
+          <MenuItem value={RUN_TYPE.INTERVAL}>{RUN_TYPE.INTERVAL}</MenuItem>
+          <MenuItem value={RUN_TYPE.LONG}>{RUN_TYPE.LONG}</MenuItem>
         </Select>
 
         <FormControl sx={{ mt: 2 }}>
@@ -48,7 +74,7 @@ const EditActivity = ({ details: { distance, type }, onSubmit }) => {
             InputProps={{
               endAdornment: <InputAdornment position="end">km</InputAdornment>,
             }}
-            onChange={(e) => setNewDistance(e.target.value)}
+            onChange={(e) => setNewDistance(Number.parseFloat(e.target.value))}
           />
         </FormControl>
       </FormControl>
@@ -56,7 +82,7 @@ const EditActivity = ({ details: { distance, type }, onSubmit }) => {
         variant="contained"
         onClick={() => onSubmit({ newDistance: newDistance, newType: newType })}
       >
-        Submit
+        Update
       </Button>
     </Box>
   );

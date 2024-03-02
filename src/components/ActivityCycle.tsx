@@ -1,12 +1,19 @@
 import Grid from "@mui/material/Unstable_Grid2";
 import React from "react";
 import ActivityCard from "./cards/ActivityCard";
-import { Box } from "@mui/material";
+import { Activity } from "../App";
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
-const ActivityCycle = ({ activities, length }) => {
+export type ActivityCycleProps = {
+  activities: Activity[],
+  length: number
+}
+
+const ActivityCycle: React.FC<ActivityCycleProps> = ({ activities, length }) => {
   const elements = activities.map((activity, idx) => (
-    <Grid xs={2}>
-      <ActivityCard key={idx} details={activity.details} num={idx + 1} />
+    <Grid key={idx} xs={2}>
+      <ActivityCard details={activity.details} num={idx + 1} />
     </Grid>
   ));
 

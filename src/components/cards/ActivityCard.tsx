@@ -1,8 +1,9 @@
 import BaseCard from "./BaseCard";
-import { TYPE_EASY, TYPE_INTERVALS, TYPE_LONG } from "../../data";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import EditActivity from "../EditActivity";
+import { RUN_TYPE } from "../../data";
+import { useDrag } from "react-dnd";
 
 const modalStyle = {
   position: "absolute",
@@ -17,11 +18,33 @@ const modalStyle = {
   p: 4,
 };
 
-const green = "#a5d6a7";
-const red = "#ef5350";
-const blue = "#64b5f6";
+export enum COLOUR {
+  GREEN = "#a5d6a7",
+  RED = "#ef5350",
+  BLUE = "#64b5f6",
+}
 
-const ActivityCard = ({ details: { distance, type }, num }) => {
+export type ActivityCardProps = {
+  details: {
+    distance: number;
+    type: RUN_TYPE;
+  };
+  num: number;
+};
+
+export type CardUpdateType = {
+  newDistance: number;
+  newType: RUN_TYPE;
+};
+
+export const DragItemTypes = {
+  ACTIVITY: "Activity",
+};
+
+const ActivityCard: React.FC<ActivityCardProps> = ({
+  details: { distance, type },
+  num,
+}) => {
   const [currentType, setCurrentType] = useState(type);
   const [currentDistance, setCurrentDistance] = useState(distance);
 
@@ -29,23 +52,23 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const updateCard = ({ newDistance, newType }) => {
+  const updateCard = ({ newDistance, newType }: CardUpdateType) => {
     setCurrentType(newType);
     setCurrentDistance(newDistance);
     handleClose();
   };
 
-  const createTypeElement = () => {
+  const createTypeElement = (currentType: RUN_TYPE) => {
     let colour;
     switch (currentType) {
-      case TYPE_EASY:
-        colour = green;
+      case RUN_TYPE.EASY:
+        colour = COLOUR.GREEN;
         break;
-      case TYPE_INTERVALS:
-        colour = red;
+      case RUN_TYPE.INTERVAL:
+        colour = COLOUR.RED;
         break;
-      case TYPE_LONG:
-        colour = blue;
+      case RUN_TYPE.LONG:
+        colour = COLOUR.BLUE;
         break;
 
       default:
@@ -68,12 +91,20 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
     );
   };
 
+  // Drag and Drop Handling
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: DragItemTypes.ACTIVITY,
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   return (
-    <>
+    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1, cursor: "move" }}>
       <BaseCard
         title={currentDistance + " km"}
         content={createTypeElement(currentType)}
-        info={num}
+        info={num.toLocaleString()}
         onClick={handleOpen}
       ></BaseCard>
       <Modal
@@ -98,7 +129,7 @@ const ActivityCard = ({ details: { distance, type }, num }) => {
           </Box>
         </Fade>
       </Modal>
-    </>
+    </div>
   );
 };
 
