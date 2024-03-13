@@ -28,7 +28,10 @@ export type ActivityCardProps = {
   distance: number;
   type: RUN_TYPE;
   num: number;
+  id: number;
   swapWith: (index: number) => void;
+  draggingId: number;
+  setDragging: (id: number) => void;
 };
 
 export type CardUpdateType = {
@@ -44,12 +47,15 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   distance,
   type,
   num,
+  id,
   swapWith,
+  draggingId,
+  setDragging,
 }) => {
   const [currentType, setCurrentType] = useState(type);
   const [currentDistance, setCurrentDistance] = useState(distance);
-  
-  // update the state each time the props change -> 
+
+  // update the state each time the props change ->
   // do I only need this because of scope?
   useEffect(() => {
     setCurrentType(type);
@@ -102,15 +108,27 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   // Drag and Drop Handling
   const [{ isDragging }, drag] = useDrag(() => ({
     type: DragItemTypes.ACTIVITY,
+    // end: () => {setDragging(id)},
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   }));
 
+  useEffect(() => {
+    if (isDragging) {
+      setDragging(id);
+    } else {
+      setDragging(-1);
+    }
+  }, [isDragging]);
+
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: DragItemTypes.ACTIVITY,
-      drop: () => swapWith(1),
+      drop: () => {
+        console.log("dropping on " + distance + " // " + type);
+        swapWith(draggingId);
+      },
       collect: (monitor) => ({
         isOver: !!monitor.isOver(),
       }),
@@ -119,40 +137,42 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   );
 
   return (
-    <div
-      ref={drag}
-      style={{ opacity: isDragging ? 0.5 : 1, cursor: "pointer" }}
-    >
-      {currentDistance && currentType && (
-        <BaseCard
-          title={currentDistance + " km"}
-          content={createTypeElement(currentType)}
-          info={num.toLocaleString()}
-          onClick={handleOpen}
-        ></BaseCard>
-      )}
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-        slots={{ backdrop: Backdrop }}
-        closeAfterTransition
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
+    <div ref={drop}>
+      <div
+        ref={drag}
+        style={{ opacity: isDragging || isOver ? 0.5 : 1, cursor: "pointer" }}
       >
-        <Fade in={open}>
-          <Box sx={modalStyle}>
-            <EditActivity
-              details={{ distance: currentDistance, type: currentType }}
-              onSubmit={updateCard}
-            />
-          </Box>
-        </Fade>
-      </Modal>
+        {currentDistance && currentType && (
+          <BaseCard
+            title={currentDistance + " km"}
+            content={createTypeElement(currentType)}
+            info={num.toLocaleString()}
+            onClick={handleOpen}
+          ></BaseCard>
+        )}
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          slots={{ backdrop: Backdrop }}
+          closeAfterTransition
+          slotProps={{
+            backdrop: {
+              timeout: 500,
+            },
+          }}
+        >
+          <Fade in={open}>
+            <Box sx={modalStyle}>
+              <EditActivity
+                details={{ distance: currentDistance, type: currentType }}
+                onSubmit={updateCard}
+              />
+            </Box>
+          </Fade>
+        </Modal>
+      </div>
     </div>
   );
 };
