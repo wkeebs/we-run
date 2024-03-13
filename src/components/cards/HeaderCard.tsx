@@ -8,7 +8,11 @@ import {
 } from "@mui/material";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-const HeaderCard = ({ rowNum }) => {
+export type HeaderCardProps = {
+  rowNum: number
+}
+
+const HeaderCard: React.FC<HeaderCardProps> = ({ rowNum }) => {
   const [hover, setHover] = useState(false);
 
   const hoverHandleIcon = (
