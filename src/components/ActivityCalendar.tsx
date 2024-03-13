@@ -17,8 +17,6 @@ const chunkData = (newData: Activity[]) => chunk(newData, CYCLE_LENGTH);
 
 const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
   const [activities, setActivities] = useState(chunkData(data));
-  const [dragging, setDragging] = useState(-1);
-
 
   const swapActivities =
     (arr: Activity[][]) =>
@@ -62,17 +60,12 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
           >
             <HeaderCard rowNum={idx + 1} />
             <ActivityCycle
-              swapInArr={swapActivities(activities)}
               activities={cycle}
               length={CYCLE_LENGTH}
-              draggingId={dragging}
-              setDragging={setDragging}
             />
           </Stack>
         );
       })}
-      <button onClick={() => swapActivities(activities)(1)(8)}>Swap</button>
-      <p style={{color: "black"}}>Currently Dragging: {dragging}</p>
     </DndProvider>
   );
 };
