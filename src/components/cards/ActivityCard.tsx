@@ -2,7 +2,10 @@ import BaseCard from "./BaseCard";
 import React, { useEffect, useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import EditActivity from "../EditActivity";
-import { RUN_TYPE } from "../../data";
+import { CYCLE_LENGTH, RUN_TYPE } from "../../data";
+
+import { useDroppable, useDraggable, useDndMonitor } from "@dnd-kit/core";
+import {CSS} from '@dnd-kit/utilities';
 
 const modalStyle = {
   position: "absolute",
@@ -45,6 +48,15 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   num,
   id,
 }) => {
+  // drag and drop functionality
+  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+    id: id,
+  });
+  const dragStyle = {
+    transform: CSS.Translate.toString(transform),
+  };
+
+  // other functionality
   const [currentType, setCurrentType] = useState(type);
   const [currentDistance, setCurrentDistance] = useState(distance);
 
@@ -100,14 +112,18 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
 
   return (
     <>
-      {currentDistance && currentType && (
-        <BaseCard
-          title={currentDistance + " km"}
-          content={createTypeElement(currentType)}
-          info={num.toLocaleString()}
-          onClick={handleOpen}
-        ></BaseCard>
-      )}
+      <div ref={setNodeRef} style={dragStyle} {...listeners} {...attributes}>
+        <div>
+          {currentDistance && currentType && (
+            <BaseCard
+              title={currentDistance + " km"}
+              content={createTypeElement(currentType)}
+              info={(((num - 1) % CYCLE_LENGTH) + 1).toLocaleString()}
+              onClick={handleOpen}
+            ></BaseCard>
+          )}
+        </div>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}
