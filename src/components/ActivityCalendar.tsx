@@ -6,7 +6,17 @@ import React, { useState } from "react";
 import ActivityCard from "./cards/ActivityCard";
 import HeaderCard from "./cards/HeaderCard";
 import ActivityCycle from "./ActivityCycle";
-import { DndContext, closestCorners } from "@dnd-kit/core";
+import {
+  DndContext,
+  DragEndEvent,
+  DragStartEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCorners,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 export type ActivityCalendarProps = {
   data: Activity[];
@@ -42,27 +52,31 @@ const swapActivities =
     return [...newState];
   };
 
+
+
 const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
   const [activities, setActivities] = useState(data);
   const [chunkedActivities, setChunkedActivities] = useState(
     chunkData(activities)
   );
 
+  // drag and drop
+  const [activeId, setActiveId] = useState<Activity | null>(null);
+
   return (
     <>
       <DndContext collisionDetection={closestCorners}>
         <Grid container columns={{ xs: 1, sm: CYCLE_LENGTH }}>
-
-            {...activities.map((activity, idx) => (
-              <Grid item key={idx} xs={1}>
-                <ActivityCard
-                  distance={activity.details.distance}
-                  type={activity.details.type}
-                  num={idx + 1}
-                  id={activity.id}
-                />
-              </Grid>
-            ))}
+          {...activities.map((activity, idx) => (
+            <Grid item key={idx} xs={1}>
+              <ActivityCard
+                distance={activity.details.distance}
+                type={activity.details.type}
+                num={idx + 1}
+                id={activity.id}
+              />
+            </Grid>
+          ))}
         </Grid>
       </DndContext>
 
@@ -81,6 +95,26 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
       })} */}
     </>
   );
+
+  function handleDragStart(event: DragStartEvent) {
+    const {active} = event;
+    setActiveId(active.id);
+  }
+  
+  function handleDragEnd(event: DragEndEvent) {
+    const {active, over} = event;
+    
+    if (active.id !== over.id) {
+      setItems((items) => {
+        const oldIndex = items.indexOf(active.id);
+        const newIndex = items.indexOf(over.id);
+        
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+    
+    setActiveId(null);
+  }
 };
 
 export default ActivityCalendar;

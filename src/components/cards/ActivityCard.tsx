@@ -1,5 +1,5 @@
 import BaseCard from "./BaseCard";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import EditActivity from "../EditActivity";
 import { CYCLE_LENGTH, RUN_TYPE } from "../../data";
@@ -49,6 +49,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   id,
 }) => {
   // drag and drop functionality -->
+  useDndMonitor({
+    onDragStart(event) {},
+    onDragMove(event) {},
+    onDragOver(event) {},
+    onDragEnd(event) {},
+    onDragCancel(event) {},
+  });
+
   // drag
   const draggable = useDraggable({
     id: id,
@@ -159,6 +167,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       </Modal>
     </>
   );
+};
+
+export type DragActivityCardProps = {
+  card: ReactElement;
+};
+
+const DragActivityCard: React.FC<DragActivityCardProps> = ({ card }) => {
+  return <div style={{ opacity: 0.7, transform: "rotate(45deg)" }}>{card}</div>;
 };
 
 export default ActivityCard;
