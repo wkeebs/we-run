@@ -1,8 +1,11 @@
 import BaseCard from "./BaseCard";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Backdrop, Box, Fade, Modal } from "@mui/material";
 import EditActivity from "../EditActivity";
-import { RUN_TYPE } from "../../data";
+import { CYCLE_LENGTH, RUN_TYPE } from "../../data";
+
+import { useDroppable, useDraggable, useDndMonitor } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
 
 const modalStyle = {
   position: "absolute",
@@ -45,6 +48,34 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   num,
   id,
 }) => {
+  // drag and drop functionality -->
+  useDndMonitor({
+    onDragStart(event) {},
+    onDragMove(event) {},
+    onDragOver(event) {},
+    onDragEnd(event) {},
+    onDragCancel(event) {},
+  });
+
+  // drag
+  const draggable = useDraggable({
+    id: id,
+  });
+  const { attributes, listeners, transform } = draggable;
+  const setDragRef = draggable.setNodeRef;
+
+  const dragStyle = {
+    transform: CSS.Translate.toString(transform),
+  };
+
+  // drop
+  const droppable = useDroppable({
+    id: id,
+  });
+  const setDropRef = droppable.setNodeRef;
+  // -->
+
+  // other functionality
   const [currentType, setCurrentType] = useState(type);
   const [currentDistance, setCurrentDistance] = useState(distance);
 
@@ -100,14 +131,18 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
 
   return (
     <>
-      {currentDistance && currentType && (
-        <BaseCard
-          title={currentDistance + " km"}
-          content={createTypeElement(currentType)}
-          info={num.toLocaleString()}
-          onClick={handleOpen}
-        ></BaseCard>
-      )}
+      <div ref={setDragRef} style={dragStyle} {...listeners} {...attributes}>
+        <div ref={setDropRef}>
+          {currentDistance && currentType && (
+            <BaseCard
+              title={currentDistance + " km"}
+              content={createTypeElement(currentType)}
+              info={(((num - 1) % CYCLE_LENGTH) + 1).toLocaleString()}
+              onClick={handleOpen}
+            ></BaseCard>
+          )}
+        </div>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -132,6 +167,14 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       </Modal>
     </>
   );
+};
+
+export type DragActivityCardProps = {
+  card: ReactElement;
+};
+
+const DragActivityCard: React.FC<DragActivityCardProps> = ({ card }) => {
+  return <div style={{ opacity: 0.7, transform: "rotate(45deg)" }}>{card}</div>;
 };
 
 export default ActivityCard;
