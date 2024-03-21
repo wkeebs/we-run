@@ -52,8 +52,6 @@ const swapActivities =
     return [...newState];
   };
 
-
-
 const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
   const [activities, setActivities] = useState(data);
   const [chunkedActivities, setChunkedActivities] = useState(
@@ -96,25 +94,7 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
     </>
   );
 
-  function handleDragStart(event: DragStartEvent) {
-    const {active} = event;
-    setActiveId(active.id);
-  }
-  
-  function handleDragEnd(event: DragEndEvent) {
-    const {active, over} = event;
-    
-    if (active.id !== over.id) {
-      setItems((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
-        
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-    
-    setActiveId(null);
-  }
+  setActiveId(null);
 };
 
 export default ActivityCalendar;
