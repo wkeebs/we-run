@@ -6,6 +6,7 @@ import { CYCLE_LENGTH, RUN_TYPE } from "../../data";
 
 import { useDroppable, useDraggable, useDndMonitor } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import { useSortable } from "@dnd-kit/sortable";
 
 const modalStyle = {
   position: "absolute",
@@ -49,30 +50,44 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   id,
 }) => {
   // drag and drop functionality -->
-  useDndMonitor({
-    onDragStart(event) {},
-    onDragMove(event) {},
-    onDragOver(event) {},
-    onDragEnd(event) {},
-    onDragCancel(event) {},
-  });
+  // useDndMonitor({
+  //   onDragStart(event) {},
+  //   onDragMove(event) {},
+  //   onDragOver(event) {},
+  //   onDragEnd(event) {},
+  //   onDragCancel(event) {},
+  // });
 
-  // drag
-  const draggable = useDraggable({
-    id: id,
-  });
-  const { attributes, listeners, transform } = draggable;
-  const setDragRef = draggable.setNodeRef;
+  // sortable
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({id: id});
 
-  const dragStyle = {
-    transform: CSS.Translate.toString(transform),
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
   };
 
+  // drag
+  // const draggable = useDraggable({
+  //   id: id,
+  // });
+  // const { attributes, listeners, transform } = draggable;
+  // const setDragRef = draggable.setNodeRef;
+
+  // const dragStyle = {
+  //   transform: CSS.Translate.toString(transform),
+  // };
+
   // drop
-  const droppable = useDroppable({
-    id: id,
-  });
-  const setDropRef = droppable.setNodeRef;
+  // const droppable = useDroppable({
+  //   id: id,
+  // });
+  // const setDropRef = droppable.setNodeRef;
   // -->
 
   // other functionality
@@ -131,8 +146,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
 
   return (
     <>
-      <div ref={setDragRef} style={dragStyle} {...listeners} {...attributes}>
-        <div ref={setDropRef}>
+      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
           {currentDistance && currentType && (
             <BaseCard
               title={currentDistance + " km"}
@@ -142,7 +156,6 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
             ></BaseCard>
           )}
         </div>
-      </div>
       <Modal
         open={open}
         onClose={handleClose}

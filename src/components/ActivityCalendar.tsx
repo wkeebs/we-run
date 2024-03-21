@@ -16,7 +16,12 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 export type ActivityCalendarProps = {
   data: Activity[];
@@ -61,21 +66,33 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
   // drag and drop
   const [activeId, setActiveId] = useState<Activity | null>(null);
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   return (
     <>
-      <DndContext collisionDetection={closestCorners}>
-        <Grid container columns={{ xs: 1, sm: CYCLE_LENGTH }}>
-          {...activities.map((activity, idx) => (
-            <Grid item key={idx} xs={1}>
-              <ActivityCard
-                distance={activity.details.distance}
-                type={activity.details.type}
-                num={idx + 1}
-                id={activity.id}
-              />
-            </Grid>
-          ))}
-        </Grid>
+      <DndContext collisionDetection={closestCorners} sensors={sensors}>
+        <SortableContext
+          items={activities}
+          strategy={horizontalListSortingStrategy}
+        >
+          <Grid container columns={{ xs: 1, sm: CYCLE_LENGTH }}>
+            {...activities.map((activity, idx) => (
+              <Grid item key={idx} xs={1}>
+                <ActivityCard
+                  distance={activity.details.distance}
+                  type={activity.details.type}
+                  num={idx + 1}
+                  id={activity.id}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </SortableContext>
       </DndContext>
 
       {/* {chunkedActivities.map((cycle: Activity[], idx: number) => {
