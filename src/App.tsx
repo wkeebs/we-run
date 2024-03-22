@@ -4,14 +4,20 @@ import ActivityCalendar from "./components/ActivityCalendar";
 import CalendarCreator from "./components/CalendarCreator";
 import { RUN_TYPE } from "./data";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { createTheme, ThemeProvider } from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
+
+import {
+  Box,
+  Container,
+  createTheme,
+  Link,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 
 const theme = createTheme({
   typography: {
-    fontFamily: [
-      "Fira Sans",
-      "Poppins",
-    ].join(","),
+    fontFamily: ["Fira Sans", "Poppins"].join(","),
   },
 });
 
@@ -40,12 +46,46 @@ const testData: Activity[] = [
   { id: 14, details: { distance: 24, type: RUN_TYPE.EASY } },
 ];
 
+const Footer = () => {
+  return (
+    <Box
+      component="footer"
+      sx={{
+        py: 3,
+        px: 2,
+        mt: "auto",
+        backgroundColor: (theme) =>
+          theme.palette.mode === "light"
+            ? theme.palette.grey[200]
+            : theme.palette.grey[800],
+      }}
+    >
+      <Container maxWidth="sm">
+        <Typography variant="body1"></Typography>
+        <Typography variant="body2" color="text.secondary">
+          {"Built by "}
+          <GitHubIcon
+            sx={{ fontSize: "15px", transform: "translate(0, 3px)" }}
+          />{" "}
+          <Link color="inherit" href="https://github.com/wkeebs">
+            wkeebs
+          </Link>{" "}
+          {/* {new Date().getFullYear()} */}
+        </Typography>
+      </Container>
+    </Box>
+  );
+};
+
 function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ThemeProvider theme={theme}>
-        <CalendarCreator />
-        <ActivityCalendar data={testData}></ActivityCalendar>
+        <Box padding={2}>
+          <CalendarCreator />
+          {/* <ActivityCalendar data={testData}></ActivityCalendar> */}
+        </Box>
+        <Footer />
       </ThemeProvider>
     </LocalizationProvider>
   );

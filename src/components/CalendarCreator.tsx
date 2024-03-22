@@ -39,7 +39,7 @@ const CalendarCreator = () => {
               ></TextField>
             </FormControl>
             <FormControl sx={{ margin: 2 }}>
-              <Typography variant="subtitle1">Training Plan Length</Typography>
+              <Typography variant="subtitle1">Training plan length</Typography>
               <Grid container spacing={1} alignItems={"center"}>
                 <Grid item>
                   <InputSlider max={36} />
@@ -51,11 +51,11 @@ const CalendarCreator = () => {
             </FormControl>
             <FormControl sx={{ margin: 2 }}>
               <Grid item>
-                <Typography variant="subtitle1">Align Plan With:</Typography>
+                <Typography variant="subtitle1">Align plan with a:</Typography>
               </Grid>
               <Grid container spacing={1} alignItems={"center"} marginBottom={1}>
                 <Grid item>
-                  <Typography variant="caption">Start</Typography>
+                  <Typography variant="caption">Start Date</Typography>
                 </Grid>
                 <Grid item>
                   <Switch
@@ -64,12 +64,15 @@ const CalendarCreator = () => {
                   />
                 </Grid>
                 <Grid item>
-                  <Typography variant="caption">End</Typography>
+                  <Typography variant="caption">End Date</Typography>
                 </Grid>
               </Grid>
 
               <Typography variant="subtitle1"></Typography>
               <DatePicker
+                sx={{width: "50%"}}
+                format="DD/MM/YYYY"
+                formatDensity="spacious"
                 label={
                   alignWithEnd ? "Finish Date (e.g., race day)" : "Start Date "
                 }
