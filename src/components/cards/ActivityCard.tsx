@@ -1,6 +1,14 @@
 import BaseCard from "./BaseCard";
 import React, { ReactElement, useEffect, useState } from "react";
-import { Backdrop, Box, Fade, Modal } from "@mui/material";
+import {
+  Backdrop,
+  Box,
+  Card,
+  CardActionArea,
+  CardActions,
+  Fade,
+  Modal,
+} from "@mui/material";
 import EditActivity from "../EditActivity";
 import { CYCLE_LENGTH, RUN_TYPE } from "../../data";
 
@@ -59,13 +67,8 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   // });
 
   // sortable
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({id: id});
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -146,13 +149,15 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
 
   return (
     <>
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
           {currentDistance && currentType && (
             <BaseCard
               title={currentDistance + " km"}
               content={createTypeElement(currentType)}
               info={(((num - 1) % CYCLE_LENGTH) + 1).toLocaleString()}
-              onClick={handleOpen}
+              onClick={() => {
+                handleOpen();
+              }}
             ></BaseCard>
           )}
         </div>

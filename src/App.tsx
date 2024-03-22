@@ -1,6 +1,19 @@
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import "./App.css";
 import ActivityCalendar from "./components/ActivityCalendar";
+import CalendarCreator from "./components/CalendarCreator";
 import { RUN_TYPE } from "./data";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { createTheme, ThemeProvider } from "@mui/material";
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      "Fira Sans",
+      "Poppins",
+    ].join(","),
+  },
+});
 
 export type Activity = {
   id: number;
@@ -29,9 +42,12 @@ const testData: Activity[] = [
 
 function App() {
   return (
-    <>
-      <ActivityCalendar data={testData}></ActivityCalendar>
-    </>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <ThemeProvider theme={theme}>
+        <CalendarCreator />
+        <ActivityCalendar data={testData}></ActivityCalendar>
+      </ThemeProvider>
+    </LocalizationProvider>
   );
 }
 

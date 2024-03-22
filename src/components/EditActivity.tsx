@@ -12,6 +12,7 @@ import {
 import React, { useState } from "react";
 import { RUN_TYPE } from "../data";
 import { CardUpdateType } from "./cards/ActivityCard";
+import DistanceInput from "./DistanceInput";
 
 export type EditActivityProps = {
   details: {
@@ -64,8 +65,8 @@ const EditActivity: React.FC<EditActivityProps> = ({
           <MenuItem value={RUN_TYPE.INTERVAL}>{RUN_TYPE.INTERVAL}</MenuItem>
           <MenuItem value={RUN_TYPE.LONG}>{RUN_TYPE.LONG}</MenuItem>
         </Select>
-
-        <FormControl sx={{ mt: 2 }}>
+        <DistanceInput onChange={(e) => setNewDistance(Number.parseFloat(e.target.value))} value={newDistance}/>
+        {/* <FormControl sx={{ mt: 2 }}>
           <TextField
             type="number"
             label="Distance"
@@ -76,7 +77,7 @@ const EditActivity: React.FC<EditActivityProps> = ({
             }}
             onChange={(e) => setNewDistance(Number.parseFloat(e.target.value))}
           />
-        </FormControl>
+        </FormControl> */}
       </FormControl>
       <Button
         variant="contained"

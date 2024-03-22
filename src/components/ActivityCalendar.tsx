@@ -1,6 +1,6 @@
 import { CYCLE_LENGTH } from "../data";
 import { chunk } from "../utils/arrayOperations";
-import { Grid, Stack } from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import { Activity } from "../App";
 import React, { useState } from "react";
 import ActivityCard from "./cards/ActivityCard";
@@ -63,6 +63,8 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
     chunkData(activities)
   );
 
+  const [rearranging, setRearranging] = useState<boolean>(false);
+
   // drag and drop
   const [activeId, setActiveId] = useState<Activity | null>(null);
 
@@ -73,26 +75,30 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
     })
   );
 
+  const cardGrid = (
+    <Grid container columns={{ xs: 1, sm: CYCLE_LENGTH }}>
+      {...activities.map((activity, idx) => (
+        <Grid item key={idx} xs={1}>
+          <ActivityCard
+            distance={activity.details.distance}
+            type={activity.details.type}
+            num={idx + 1}
+            id={activity.id}
+          />
+        </Grid>
+      ))}
+    </Grid>
+  );
+
   return (
-    <>
+    <Box sx={{ margin: 3 }}>
       <DndContext collisionDetection={closestCorners} sensors={sensors}>
-        <SortableContext
+        {rearranging ? <SortableContext
           items={activities}
           strategy={horizontalListSortingStrategy}
         >
-          <Grid container columns={{ xs: 1, sm: CYCLE_LENGTH }}>
-            {...activities.map((activity, idx) => (
-              <Grid item key={idx} xs={1}>
-                <ActivityCard
-                  distance={activity.details.distance}
-                  type={activity.details.type}
-                  num={idx + 1}
-                  id={activity.id}
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </SortableContext>
+          {cardGrid}
+        </SortableContext> : cardGrid}
       </DndContext>
 
       {/* {chunkedActivities.map((cycle: Activity[], idx: number) => {
@@ -108,7 +114,7 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
           </Stack>
         );
       })} */}
-    </>
+    </Box>
   );
 
   setActiveId(null);
