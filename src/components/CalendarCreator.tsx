@@ -10,6 +10,7 @@ import {
   Typography,
   Button,
   Switch,
+  FormControlLabel,
 } from "@mui/material";
 import React, { useState } from "react";
 import DistanceInput from "./DistanceInput";
@@ -18,15 +19,20 @@ import InputSlider from "./InputSlider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
 
+const generateCalendar = (length: number) => {
+  
+}
+
 const CalendarCreator = () => {
   const [numberOfWeeks, setNumberOfWeeks] = useState<number>();
   const [alignWithEnd, setAlignWithEnd] = useState<boolean>(true);
+  const [date, setDate] = useState<any>();
 
   return (
     <>
       <Paper elevation={1} sx={{ paddingY: 3, margin: 3, textAlign: "start" }}>
         <Box sx={{ marginX: 5 }}>
-          <FormControl sx={{ width: "100%"}}>
+          <FormControl sx={{ width: "100%" }}>
             <FormControl>
               <TextField
                 sx={{
@@ -39,7 +45,7 @@ const CalendarCreator = () => {
               ></TextField>
             </FormControl>
             <FormControl sx={{ margin: 2 }}>
-              <Typography variant="subtitle1">Training plan length</Typography>
+              <Typography variant="subtitle1">Length</Typography>
               <Grid container spacing={1} alignItems={"center"}>
                 <Grid item>
                   <InputSlider max={36} />
@@ -51,9 +57,14 @@ const CalendarCreator = () => {
             </FormControl>
             <FormControl sx={{ margin: 2 }}>
               <Grid item>
-                <Typography variant="subtitle1">Align plan with a:</Typography>
+                <Typography variant="subtitle1">Align with</Typography>
               </Grid>
-              <Grid container spacing={1} alignItems={"center"} marginBottom={1}>
+              <Grid
+                container
+                spacing={1}
+                alignItems={"center"}
+                marginBottom={1}
+              >
                 <Grid item>
                   <Typography variant="caption">Start Date</Typography>
                 </Grid>
@@ -70,14 +81,24 @@ const CalendarCreator = () => {
 
               <Typography variant="subtitle1"></Typography>
               <DatePicker
-                sx={{width: "50%"}}
+                sx={{ width: "50%", marginTop: 1 }}
                 format="DD/MM/YYYY"
                 formatDensity="spacious"
                 label={
                   alignWithEnd ? "Finish Date (e.g., race day)" : "Start Date "
                 }
+                onChange={(e) => setDate(e)}
               />
             </FormControl>
+            <Button
+              variant="contained"
+              sx={{ margin: 2 }}
+              onClick={() => {
+                console.log(date);
+              }}
+            >
+              Create
+            </Button>
           </FormControl>
         </Box>
       </Paper>

@@ -55,6 +55,9 @@ const EditActivity: React.FC<EditActivityProps> = ({
               case RUN_TYPE.LONG:
                 setNewType(RUN_TYPE.LONG);
                 break;
+              case RUN_TYPE.REST:
+                setNewType(RUN_TYPE.REST);
+                break;
 
               default:
                 break;
@@ -64,6 +67,7 @@ const EditActivity: React.FC<EditActivityProps> = ({
           <MenuItem value={RUN_TYPE.EASY}>{RUN_TYPE.EASY}</MenuItem>
           <MenuItem value={RUN_TYPE.INTERVAL}>{RUN_TYPE.INTERVAL}</MenuItem>
           <MenuItem value={RUN_TYPE.LONG}>{RUN_TYPE.LONG}</MenuItem>
+          <MenuItem value={RUN_TYPE.REST}>{RUN_TYPE.REST}</MenuItem>
         </Select>
         <DistanceInput onChange={(e) => setNewDistance(Number.parseFloat(e.target.value))} value={newDistance}/>
         {/* <FormControl sx={{ mt: 2 }}>

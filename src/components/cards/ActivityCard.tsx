@@ -6,12 +6,14 @@ import {
   Card,
   CardActionArea,
   CardActions,
+  CardContent,
   Fade,
   Modal,
+  Typography,
 } from "@mui/material";
 import EditActivity from "../EditActivity";
 import { CYCLE_LENGTH, RUN_TYPE } from "../../data";
-
+import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined";
 import { useDroppable, useDraggable, useDndMonitor } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { useSortable } from "@dnd-kit/sortable";
@@ -33,6 +35,7 @@ export enum COLOUR {
   GREEN = "#a5d6a7",
   RED = "#ef5350",
   BLUE = "#64b5f6",
+  YELLOW = "yellow",
 }
 
 export type ActivityCardProps = {
@@ -126,6 +129,8 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
       case RUN_TYPE.LONG:
         colour = COLOUR.BLUE;
         break;
+      case RUN_TYPE.REST:
+        return <ForestOutlinedIcon color="success" fontSize="medium" />;
 
       default:
         colour = "white";
@@ -148,19 +153,19 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
   };
 
   return (
-    <>
-        <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-          {currentDistance && currentType && (
-            <BaseCard
-              title={currentDistance + " km"}
-              content={createTypeElement(currentType)}
-              info={(((num - 1) % CYCLE_LENGTH) + 1).toLocaleString()}
-              onClick={() => {
-                handleOpen();
-              }}
-            ></BaseCard>
-          )}
-        </div>
+    <Box>
+      {/* <div ref={setNodeRef} style={style} {...attributes} {...listeners}> */}
+      {
+        <BaseCard
+          title={type == RUN_TYPE.REST ? "Rest" : currentDistance + " km"}
+          content={createTypeElement(currentType)}
+          info={(((num - 1) % CYCLE_LENGTH) + 1).toLocaleString()}
+          onClick={() => {
+            handleOpen();
+          }}
+        ></BaseCard>
+      }
+      {/* </div> */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -183,7 +188,7 @@ const ActivityCard: React.FC<ActivityCardProps> = ({
           </Box>
         </Fade>
       </Modal>
-    </>
+    </Box>
   );
 };
 

@@ -18,9 +18,9 @@ const BaseCard: React.FC<BaseCardProps> = ({
     <Card
       onClick={onClick}
       variant="outlined"
-      sx={{ borderRadius: 0, minHeight: "100px" }}
+      sx={{ borderRadius: 0, minHeight: "135px"}}
     >
-        <CardContent sx={{ textAlign: "start" }}>
+        <CardContent sx={{ textAlign: "start"}}>
           <Typography variant="caption">{info}</Typography>
           <Typography variant="h6">{title}</Typography>
           <Typography component={"span"} variant="body2">

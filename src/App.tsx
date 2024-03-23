@@ -17,7 +17,9 @@ import {
 
 const theme = createTheme({
   typography: {
-    fontFamily: ["Fira Sans", "Poppins"].join(","),
+    fontFamily: [
+      "Fira Sans", 
+      "Poppins"].join(","),
   },
 });
 
@@ -30,7 +32,7 @@ export type Activity = {
 };
 
 const testData: Activity[] = [
-  { id: 1, details: { distance: 5, type: RUN_TYPE.EASY } },
+  { id: 1, details: { distance: 5, type: RUN_TYPE.REST } },
   { id: 2, details: { distance: 10, type: RUN_TYPE.EASY } },
   { id: 3, details: { distance: 7, type: RUN_TYPE.EASY } },
   { id: 4, details: { distance: 20, type: RUN_TYPE.LONG } },
@@ -85,7 +87,7 @@ function App() {
           <CalendarCreator />
           {/* <ActivityCalendar data={testData}></ActivityCalendar> */}
         </Box>
-        <Footer />
+        {/* <Footer /> */}
       </ThemeProvider>
     </LocalizationProvider>
   );
