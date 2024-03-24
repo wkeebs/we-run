@@ -30,7 +30,6 @@ const generatePlan = (length: number | undefined): Activity[] => {
         details: { distance: 0, type: RUN_TYPE.REST },
       };
     });
-    console.log(output);
     return output;
   }
   return [];

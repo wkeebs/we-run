@@ -27,7 +27,10 @@ export type ActivityCalendarProps = {
   data: Activity[];
 };
 
-const chunkData = (newData: Activity[]) => chunk(newData, CYCLE_LENGTH);
+const chunkData = (newData: Activity[]) => {
+  const chunked = chunk(newData, CYCLE_LENGTH);
+  return chunked.map((elem, i) => ({ id: i, data: elem }));
+};
 
 const swapActivities =
   (arr: Activity[][]) => (activityOneId: number) => (activityTwoId: number) => {
@@ -63,11 +66,6 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
     chunkData(activities)
   );
 
-  const [rearranging, setRearranging] = useState<boolean>(false);
-
-  // drag and drop
-  const [activeId, setActiveId] = useState<Activity | null>(null);
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -75,49 +73,63 @@ const ActivityCalendar: React.FC<ActivityCalendarProps> = ({ data }) => {
     })
   );
 
-  const cardGrid = (
-    <Grid container columns={{ xs: 1, sm: CYCLE_LENGTH }}>
-      {...activities.map((activity, idx) => (
-        <Grid item key={idx} xs={1}>
-          <ActivityCard
-            distance={activity.details.distance}
-            type={activity.details.type}
-            num={idx + 1}
-            id={activity.id}
-          />
-        </Grid>
-      ))}
-    </Grid>
+  // const cardGrid = (
+  //   <Grid container columns={{ xs: 1, sm: CYCLE_LENGTH }}>
+  //     {...activities.map((activity, idx) => (
+  //       <Grid item key={idx} xs={1}>
+  //         <ActivityCard
+  //           distance={activity.details.distance}
+  //           type={activity.details.type}
+  //           num={idx + 1}
+  //           id={activity.id}
+  //         />
+  //       </Grid>
+  //     ))}
+  //   </Grid>
+  // );
+
+  const cycleStack = chunkedActivities.map(
+    (cycle: { id: number; data: Activity[] }, idx: number) => {
+      return (
+        <div key={cycle.id} id={cycle.id.toLocaleString()}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ marginY: "0.25rem", border: "1px solid gray" }}
+          >
+            <HeaderCard rowNum={idx + 1} />
+            <ActivityCycle
+              id={cycle.id}
+              activities={cycle.data}
+              length={CYCLE_LENGTH}
+            />
+          </Stack>
+        </div>
+      );
+    }
   );
 
   return (
     <Box sx={{ margin: 3 }}>
-      <DndContext collisionDetection={closestCorners} sensors={sensors}>
+      {/* <DndContext collisionDetection={closestCorners} sensors={sensors}>
         {rearranging ? <SortableContext
           items={activities}
           strategy={horizontalListSortingStrategy}
         >
           {cardGrid}
         </SortableContext> : cardGrid}
+      </DndContext> */}
+      <DndContext collisionDetection={closestCorners} sensors={sensors}>
+        <SortableContext
+          items={chunkedActivities}
+          strategy={verticalListSortingStrategy}
+        >
+          {cycleStack}
+        </SortableContext>
       </DndContext>
-
-      {/* {chunkedActivities.map((cycle: Activity[], idx: number) => {
-        return (
-          <Stack
-            key={idx}
-            direction="row"
-            spacing={1}
-            sx={{ marginY: "0.25rem", border: "1px solid gray" }}
-          >
-            <HeaderCard rowNum={idx + 1} />
-            <ActivityCycle activities={cycle} length={CYCLE_LENGTH} />
-          </Stack>
-        );
-      })} */}
     </Box>
   );
 
-  setActiveId(null);
 };
 
 export default ActivityCalendar;
