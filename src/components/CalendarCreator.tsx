@@ -18,15 +18,31 @@ import { Label } from "@mui/icons-material";
 import InputSlider from "./InputSlider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider, StaticDatePicker } from "@mui/x-date-pickers";
+import { Activity } from "../App";
+import { CYCLE_LENGTH, RUN_TYPE } from "../data";
+import ActivityCalendar from "./ActivityCalendar";
 
-const generateCalendar = (length: number) => {
-  
-}
+const generatePlan = (length: number | undefined): Activity[] => {
+  if (length) {
+    const output = [...Array(length * CYCLE_LENGTH)].map((u, i) => {
+      return {
+        id: i,
+        details: { distance: 0, type: RUN_TYPE.REST },
+      };
+    });
+    console.log(output);
+    return output;
+  }
+  return [];
+};
 
 const CalendarCreator = () => {
-  const [numberOfWeeks, setNumberOfWeeks] = useState<number>();
+  const [numberOfWeeks, setNumberOfWeeks] = useState<number>(12);
   const [alignWithEnd, setAlignWithEnd] = useState<boolean>(true);
   const [date, setDate] = useState<any>();
+
+  const [planCreated, setPlanCreated] = useState<boolean>(false);
+  const [trainingPlan, setTrainingPlan] = useState<Activity[]>([]);
 
   return (
     <>
@@ -48,7 +64,12 @@ const CalendarCreator = () => {
               <Typography variant="subtitle1">Length</Typography>
               <Grid container spacing={1} alignItems={"center"}>
                 <Grid item>
-                  <InputSlider max={36} />
+                  <InputSlider
+                    max={36}
+                    onChange={(val: number) => {
+                      setNumberOfWeeks(val);
+                    }}
+                  />
                 </Grid>
                 <Grid item>
                   <Typography variant="body2">weeks</Typography>
@@ -94,7 +115,8 @@ const CalendarCreator = () => {
               variant="contained"
               sx={{ margin: 2 }}
               onClick={() => {
-                console.log(date);
+                setPlanCreated(true);
+                setTrainingPlan(generatePlan(numberOfWeeks));
               }}
             >
               Create
@@ -102,6 +124,7 @@ const CalendarCreator = () => {
           </FormControl>
         </Box>
       </Paper>
+      {planCreated ? <ActivityCalendar data={trainingPlan} /> : ""}
     </>
   );
 };

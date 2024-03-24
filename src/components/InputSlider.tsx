@@ -13,13 +13,15 @@ const Input = styled(MuiInput)`
 
 export type InputSliderProps = {
   max: number;
+  onChange: (val: number) => void
 };
 
-const InputSlider: React.FC<InputSliderProps> = ({ max }) => {
+const InputSlider: React.FC<InputSliderProps> = ({ max, onChange }) => {
   const [value, setValue] = React.useState(12);
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number);
+    onChange(newValue as number);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
